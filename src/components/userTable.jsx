@@ -1,6 +1,12 @@
-import { Pencil, Trash } from "lucide-react";
+import { Pencil, Trash, Trash2 } from "lucide-react";
 import React from "react";
 
+/**
+ * Componente para mostrar/editar usuarios
+ * @param {Array} users - Lista de usuarios
+ * @param {(id: string) => void} handleEdit - Callback editar
+ * @param {(id: string) => void} handleDelete - Callback eliminar
+ */
 export const UserTable = ({ users, handleEdit, handleDelete }) => {
   return (
     <>
@@ -27,7 +33,7 @@ export const UserTable = ({ users, handleEdit, handleDelete }) => {
                     onClick={() => handleDelete(user.id)}
                     className="text-red-800 p-1 cursor-pointer"
                   >
-                    <Trash size={18} />
+                    <Trash2 size={18} />
                   </button>
                 </div>
               </div>
@@ -61,7 +67,7 @@ export const UserTable = ({ users, handleEdit, handleDelete }) => {
                     />
                   </button>
                   <button onClick={() => handleDelete(user.id)}>
-                    <Trash className="text-red-800 cursor-pointer" size={16} />
+                    <Trash2 className="text-red-800 cursor-pointer" size={16} />
                   </button>
                 </td>
               </tr>
@@ -71,10 +77,10 @@ export const UserTable = ({ users, handleEdit, handleDelete }) => {
       </div>
 
       {/* Versión desktop */}
-      <div className="hidden xl:block overflow-x-auto h-[500px] overflow-y-scroll">
+      <div className="hidden xl:block overflow-x-auto h-[550px] overflow-y-scroll">
         <table className="min-w-full border mx-auto rounded-lg ">
           <thead>
-            <tr className="bg-neutral-950 text-white">
+            <tr className="bg-blue-900 text-white">
               <th className="py-2 px-4 border">Nombre</th>
               <th className="py-2 px-4 border">Apellido</th>
               <th className="py-2 px-4 border">Correo</th>
@@ -90,7 +96,7 @@ export const UserTable = ({ users, handleEdit, handleDelete }) => {
                 <td className="py-2 px-4 border">{user.email}</td>
                 <td className="py-2 px-4 border">
                   <button onClick={() => handleDelete(user.id)}>
-                    <Trash className="text-red-800 cursor-pointer" />
+                    <Trash2 className="text-red-800 cursor-pointer" />
                   </button>
                 </td>
                 <td className="py-2 px-4 border">

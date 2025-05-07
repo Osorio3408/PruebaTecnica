@@ -1,6 +1,14 @@
-// components/ConfirmationModal.jsx
 import React from "react";
 
+/**
+ * Componente para mostrar/editar usuarios
+ * @param {boolean} isOpen - Estado de la modal
+ * @param {() => void} onClose - Callback para cerrar la modal
+ * @param {() => void} onConfirm - Callback para confirmar la acción
+ * @param {string} title - Título de la modal
+ * @param {string} message - Mensaje de la modal
+ * @param {string} confirmText - Texto del botón de confirmar
+ */
 export const ConfirmationModal = ({
   isOpen,
   onClose,

@@ -1,5 +1,9 @@
-// components/Loading.jsx
-export const Loading = ({name}) => {
+/**
+ * Componente para mostrar/editar usuarios
+ * @param {string} name - descripción del componente
+ */
+
+export const Loading = ({ name }) => {
   return (
     <div className="flex flex-col items-center justify-center min-h-[300px] space-y-4">
       <div className="relative w-20 h-20">

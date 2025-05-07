@@ -1,5 +1,12 @@
 import React from "react";
 
+/**
+ * Componente para mostrar/editar usuarios
+ * @param {number} limit - Número de usuarios por página
+ * @param {number} total - Total de usuarios
+ * @param {number} page - Página actual
+ * @param {(page: number) => void} onPageChange - Callback para cambiar de página
+ */
 export const PaginationTable = ({
   limit,
   total,

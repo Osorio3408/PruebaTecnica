@@ -10,6 +10,8 @@ import { AddUser } from "./components/AddUser";
 import { validateEmail } from "./utils/validations";
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
+import { User } from "lucide-react";
+import UserSearch from "./components/UserSearch";
 
 const App = () => {
   // URL de la API
@@ -24,8 +26,10 @@ const App = () => {
   const [userToDelete, setUserToDelete] = useState(null); // Estado para el usuario a eliminar
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar el modal
   const [isMobileFormOpen, setIsMobileFormOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState(""); // Estado para almacenar el término de búsqueda
 
-  // Función para crear usuario
+  // Función para crear usuario, obtiene los datos del formulario
+  // y los envía a la API para crear el usuario
   const createUser = async (userData) => {
     try {
       const response = await fetch(API_URL, {
@@ -36,16 +40,17 @@ const App = () => {
       const newUser = await response.json();
       setUsers([...users, newUser]);
       setTotal(total + 1);
-      toast.success("Usuario creado con éxito", { theme: "dark" });
+      toast.success("Usuario creado con éxito", { theme: "light" });
       return newUser;
     } catch (error) {
       console.error("Error creating user:", error);
-      toast.error("Error al crear usuario", { theme: "dark" });
+      toast.error("Error al crear usuario", { theme: "light" });
       throw error;
     }
   };
 
-  // Función para actualizar usuario
+  // Función para actualizar usuario, obtiene los datos del formulario
+  // y los envía a la API para actualizar el usuario
   const updateUser = async (id, userData) => {
     try {
       const response = await fetch(`${API_URL}/${id}`, {
@@ -55,22 +60,23 @@ const App = () => {
       });
       const updatedUser = await response.json();
       setUsers(users.map((user) => (user.id === id ? updatedUser : user)));
-      toast.success("Usuario actualizado con éxito", { theme: "dark" });
+      toast.success("Usuario actualizado con éxito", { theme: "light" });
       return updatedUser;
     } catch (error) {
       console.error("Error updating user:", error);
-      toast.error("Error al actualizar usuario", { theme: "dark" });
+      toast.error("Error al actualizar usuario", { theme: "light" });
       throw error;
     }
   };
 
-  // Función para eliminar usuario
+  // Función para eliminar usuario, obtiene el id del usuario
+  // y lo envía a la API para eliminar el usuario
   const deleteUser = async (id) => {
     try {
       await fetch(`${API_URL}/${id}`, { method: "DELETE" });
       setUsers(users.filter((user) => user.id !== id));
       setTotal(total - 1);
-      toast.success("Usuario eliminado con éxito", { theme: "dark" });
+      toast.success("Usuario eliminado con éxito", { theme: "light" });
 
       // Ajustar paginación si es necesario
       if (paginatedUsers.length === 1 && page > 1) {
@@ -78,23 +84,41 @@ const App = () => {
       }
     } catch (error) {
       console.error("Error deleting user:", error);
-      toast.error("Error al eliminar usuario", { theme: "dark" });
+      toast.error("Error al eliminar usuario", { theme: "light" });
       throw error;
     }
   };
 
-  //Función para realizar la paginación
+  //Función para realizar la paginación, cambia el número de usuarios por página
   const handleLimitChange = (newLimit) => {
     setLimit(newLimit);
   };
 
-  // Función para cambiar de página
+  // Función para cambiar de página, cambia el número de página
   const handlePageChange = (newPage) => {
     setPage(newPage);
   };
 
+  // Función para manejar el cambio en el campo de búsqueda
+  const filteredUsers = users.filter(
+    (user) =>
+      user.status &&
+      (user.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
+
   // Calcula usuarios paginados:
-  const paginatedUsers = users.slice((page - 1) * limit, page * limit);
+  const paginatedUsers = filteredUsers.slice((page - 1) * limit, page * limit);
+
+  // 3. Actualiza el total basado en usuarios filtrados
+  useEffect(() => {
+    setTotal(filteredUsers.length);
+    // Resetear a página 1 cuando se filtra
+    if (page !== 1 && searchTerm) {
+      setPage(1);
+    }
+  }, [filteredUsers, page, searchTerm]);
 
   // Funciones completas CRUD
   const handleAddUser = () => {
@@ -132,14 +156,15 @@ const App = () => {
     setUserToDelete(null);
   };
 
-  // Función para editar un usuario
-
+  // Función para editar un usuario, obtiene el id del usuario
   const handleEditUser = (userId) => {
     const userToEdit = users.find((user) => user.id === userId);
     setCurrentUser(userToEdit);
     setIsMobileFormOpen(true);
   };
 
+  // Función para guardar el usuario, obtiene los datos del formulario
+  // y los envía a la función de crear el usuario
   const handleSaveUser = async (userData) => {
     // Validación de campos requeridos
     if (
@@ -147,14 +172,14 @@ const App = () => {
       !userData.lastName?.trim() ||
       !userData.email?.trim()
     ) {
-      toast.error("Por favor, completa todos los campos.", { theme: "dark" });
+      toast.error("Por favor, completa todos los campos.", { theme: "light" });
       return;
     }
 
     // Validación de email
     if (!validateEmail(userData.email)) {
       toast.error("Por favor, ingresa un correo electrónico válido.", {
-        theme: "dark",
+        theme: "light",
       });
       return;
     }
@@ -199,7 +224,7 @@ const App = () => {
   }, []);
 
   return (
-    <article className="w-full flex flex-col justify-center items-center h-full">
+    <article className="w-full flex flex-col justify-center items-center h-full ">
       {/* <h1 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-blue-800">
         Control de usuarios
       </h1> */}
@@ -210,7 +235,7 @@ const App = () => {
         setIsMobileFormOpen={setIsMobileFormOpen}
       />
 
-      <div className="w-full flex flex-col lg:flex-row gap-20 justify-center items-start px-1 py-2 my-10">
+      <div className="w-full flex flex-col lg:flex-row gap-10 justify-center items-start px-2 py-2 my-10">
         {/* Parte izquierda donde se verán los usuarios */}
         <div className="max-w-full w-full lg:w-1/2 h-full space-y-2">
           {/* Mostrar Loading o la tabla según el estado */}
@@ -218,6 +243,13 @@ const App = () => {
             <Loading name={"usuarios"} />
           ) : (
             <>
+              <UserSearch onSearch={(term) => setSearchTerm(term)} />
+              {searchTerm && (
+                <div className="text-sm text-gray-500 mb-2">
+                  Mostrando {filteredUsers.length} resultados para "{searchTerm}
+                  "
+                </div>
+              )}
               {/* Componente para poner el máximo de usuarios por página  */}
               <PaginationControlers
                 limit={limit}
@@ -244,7 +276,7 @@ const App = () => {
         </div>
 
         {/* Panel derecho - visible solo en desktop */}
-        <div className="hidden lg:block w-full lg:w-1/2 h-full bg-neutral-800 p-4 rounded-lg shadow my-auto">
+        <div className="hidden lg:block w-full lg:w-1/2 h-full bg-blue-100 p-4 rounded-lg shadow my-auto">
           {currentUser ? (
             <UserForm
               user={currentUser}
@@ -252,13 +284,14 @@ const App = () => {
               onCancel={handleCancelEdit}
             />
           ) : (
-            <div className="flex flex-col items-center justify-center h-full text-center p-8 text-gray-400">
+            <div className="flex flex-col items-center justify-center h-full text-center p-8 text-black">
               <p className="mb-4">Selecciona un usuario para editar o</p>
               <button
                 onClick={handleAddUser}
-                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                className="px-4 py-2 flex items-center justify-center gap-2 hover:cursor-pointer bg-blue-600 text-white rounded hover:bg-blue-700"
               >
                 Agregar nuevo usuario
+                <User />
               </button>
             </div>
           )}

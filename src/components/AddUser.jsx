@@ -1,6 +1,11 @@
 import { Plus } from 'lucide-react';
 import React from 'react'
 
+/**
+ * Componente para mostrar/editar usuarios
+ * * @param {function} handleAddUser - Callback para agregar usuario
+ * * @param {function} setIsMobileFormOpen - Callback para abrir el formulario móvil
+ */
 export const AddUser = ({handleAddUser, setIsMobileFormOpen}) => {
   return (
     <button

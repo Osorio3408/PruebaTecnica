@@ -2,6 +2,14 @@
 import React, { useState } from "react";
 import { X, Save } from "lucide-react";
 
+/**
+ * Componente para mostrar/editar usuarios
+ * @param {Object} user - Usuario a editar (opcional)
+ * * @param {(user: Object) => void} onSave - Callback para guardar el usuario
+ * * @param {() => void} onCancel - Callback para cancelar la edición
+ * * @param {boolean} isMobile - Indica si se está en versión móvil
+ * @returns {JSX.Element}
+ */
 export const UserForm = ({ user, onSave, onCancel, isMobile = false }) => {
   const [formData, setFormData] = useState(
     user || {
@@ -29,18 +37,18 @@ export const UserForm = ({ user, onSave, onCancel, isMobile = false }) => {
     >
       <div
         className={`
-        bg-neutral-900 rounded-lg shadow-xl 
+        bg-gray-50 rounded-lg shadow-xl 
         ${isMobile ? "w-full max-w-md p-2" : "w-full h-full p-6"}
       `}
       >
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-medium text-gray-300">
+          <h3 className="text-lg font-medium text-black">
             {user?.id ? "Editar Usuario" : "Nuevo Usuario"}
           </h3>
           {isMobile && (
             <button
               onClick={onCancel}
-              className="text-gray-300 hover:text-gray-700"
+              className="text-black hover:text-gray-700"
             >
               <X size={20} />
             </button>
@@ -49,7 +57,7 @@ export const UserForm = ({ user, onSave, onCancel, isMobile = false }) => {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">
+            <label className="block text-sm font-medium text-neutral-800 mb-1">
               Nombre
             </label>
             <input
@@ -58,13 +66,14 @@ export const UserForm = ({ user, onSave, onCancel, isMobile = false }) => {
               onChange={(e) =>
                 setFormData({ ...formData, firstName: e.target.value })
               }
-              className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white"
+              className="w-full p-2 border rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"
+              placeholder="Nombre..."
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">
+            <label className="block text-sm font-medium text-neutral-800 mb-1">
               Apellido
             </label>
             <input
@@ -73,13 +82,14 @@ export const UserForm = ({ user, onSave, onCancel, isMobile = false }) => {
               onChange={(e) =>
                 setFormData({ ...formData, lastName: e.target.value })
               }
-              className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white"
+              className="w-full p-2 border rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"
+              placeholder="Apellido..."
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">
+            <label className="block text-sm font-medium text-neutral-800 mb-1">
               Email
             </label>
             <input
@@ -88,7 +98,7 @@ export const UserForm = ({ user, onSave, onCancel, isMobile = false }) => {
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
               }
-              className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white"
+              className="w-full p-2 border rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"
               required
             />
           </div>
@@ -98,7 +108,7 @@ export const UserForm = ({ user, onSave, onCancel, isMobile = false }) => {
               <button
                 type="button"
                 onClick={onCancel}
-                className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-300 hover:bg-neutral-800"
+                className="px-4 py-2 border border-black rounded-md text-sm font-medium text-black hover:bg-neutral-800"
               >
                 Cancelar
               </button>

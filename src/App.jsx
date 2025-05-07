@@ -7,6 +7,7 @@ import { ConfirmationModal } from "./components/ConfirmationModal";
 import { UserForm } from "./components/UserForm";
 import { toast } from "react-toastify";
 import { AddUser } from "./components/AddUser";
+import { validateEmail } from "./utils/validations";
 
 const App = () => {
   const [users, setUsers] = useState([]); //Estado para almacenar los usuarios del api
@@ -76,29 +77,44 @@ const App = () => {
   const handleEditUser = (userId) => {
     const userToEdit = users.find((user) => user.id === userId);
     setCurrentUser(userToEdit);
-    // Siempre activar el estado del modal mobile
     setIsMobileFormOpen(true);
   };
 
   const handleSaveUser = (userData) => {
+    // Validación de campos requeridos
     if (!userData.firstName || !userData.lastName || !userData.email) {
       toast.error("Por favor, completa todos los campos.", {
         theme: "dark",
       });
       return;
     }
-    console.log(userData);
+
+    // Validación específica para email
+    if (!validateEmail(userData.email)) {
+      toast.error("Por favor, ingresa un correo electrónico válido.", {
+        theme: "dark",
+      });
+      return;
+    }
+
+    // Resto de la lógica de guardado
     if (userData.id) {
       // Edición
       setUsers(users.map((u) => (u.id === userData.id ? userData : u)));
+      toast.success("Usuario editado con éxito.", {
+        theme: "dark",
+      });
     } else {
       // Creación
       setUsers([...users, { ...userData, id: Date.now() }]);
       setTotal(total + 1);
+      toast.success("Usuario creado con éxito.", {
+        theme: "dark",
+      });
     }
-    setCurrentUser(null);
 
-    setIsMobileFormOpen(false); // Asegurarse de cerrar el modal mobile
+    setCurrentUser(null);
+    setIsMobileFormOpen(false);
   };
 
   const handleCancelEdit = () => {

@@ -37,7 +37,7 @@ export const UserTable = ({ users, handleEdit, handleDelete }) => {
       </div>
 
       {/* Versión tablet*/}
-      <div className="hidden sm:block xl:hidden overflow-x-auto">
+      <div className="hidden sm:block xl:hidden overflow-x-auto h-[550px] overflow-y-scroll">
         <table className="min-w-full border mx-auto rounded-lg mt-3">
           <thead>
             <tr>
@@ -54,11 +54,7 @@ export const UserTable = ({ users, handleEdit, handleDelete }) => {
                 </td>
                 <td className="py-2 px-2  text-sm">{user.email}</td>
                 <td className="py-2 px-2  flex justify-center space-x-2">
-                  <button
-                    onClick={() => handleDelete(user.id)}
-                    className="text-red-600 hover:text-red-900"
-                    title="Eliminar"
-                  >
+                  <button onClick={() => handleEdit(user.id)}>
                     <Pencil
                       className="text-indigo-800 cursor-pointer"
                       size={16}
@@ -75,7 +71,7 @@ export const UserTable = ({ users, handleEdit, handleDelete }) => {
       </div>
 
       {/* Versión desktop */}
-      <div className="hidden xl:block overflow-x-auto">
+      <div className="hidden xl:block overflow-x-auto h-[550px] overflow-y-scroll">
         <table className="min-w-full border mx-auto rounded-lg mt-3">
           <thead>
             <tr>

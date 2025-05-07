@@ -2,18 +2,15 @@
 import React, { useState } from "react";
 import { X, Save } from "lucide-react";
 
-export const UserForm = ({ 
-  user, 
-  onSave, 
-  onCancel,
-  isMobile = false 
-}) => {
-  const [formData, setFormData] = useState(user || {
-    firstName: '',
-    lastName: '',
-    email: '',
-    status: true
-  });
+export const UserForm = ({ user, onSave, onCancel, isMobile = false }) => {
+  const [formData, setFormData] = useState(
+    user || {
+      firstName: "",
+      lastName: "",
+      email: "",
+      status: true,
+    }
+  );
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -21,14 +18,30 @@ export const UserForm = ({
   };
 
   return (
-    <div className={`${isMobile ? 'fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4' : ''}`}>
-      <div className={`bg-neutral-900 rounded-lg shadow-xl ${isMobile ? 'w-full max-w-md p-2' : 'w-full h-full p-6'}`}>
+    <div
+      className={`
+      ${
+        isMobile
+          ? "fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 lg:hidden"
+          : "lg:block"
+      }
+    `}
+    >
+      <div
+        className={`
+        bg-neutral-900 rounded-lg shadow-xl 
+        ${isMobile ? "w-full max-w-md p-2" : "w-full h-full p-6"}
+      `}
+      >
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-medium text-gray-300">
             {user?.id ? "Editar Usuario" : "Nuevo Usuario"}
           </h3>
           {isMobile && (
-            <button onClick={onCancel} className="text-gray-300 hover:text-gray-700">
+            <button
+              onClick={onCancel}
+              className="text-gray-300 hover:text-gray-700"
+            >
               <X size={20} />
             </button>
           )}
@@ -42,7 +55,9 @@ export const UserForm = ({
             <input
               type="text"
               value={formData.firstName}
-              onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+              onChange={(e) =>
+                setFormData({ ...formData, firstName: e.target.value })
+              }
               className="w-full p-2 border rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-white"
               required
             />
@@ -55,7 +70,9 @@ export const UserForm = ({
             <input
               type="text"
               value={formData.lastName}
-              onChange={(e) => setFormData({...formData, lastName: e.target.value})}
+              onChange={(e) =>
+                setFormData({ ...formData, lastName: e.target.value })
+              }
               className="w-full p-2 border rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-white"
               required
             />
@@ -68,7 +85,9 @@ export const UserForm = ({
             <input
               type="email"
               value={formData.email}
-              onChange={(e) => setFormData({...formData, email: e.target.value})}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
               className="w-full p-2 border rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-white"
               required
             />

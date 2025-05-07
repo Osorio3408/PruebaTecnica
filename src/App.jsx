@@ -1,4 +1,3 @@
-import { Delete, Pencil, Trash } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { PaginationControlers } from "./components/paginationControlers";
 import { UserTable } from "./components/userTable";
@@ -7,6 +6,7 @@ import { Loading } from "./components/Loading";
 import { ConfirmationModal } from "./components/ConfirmationModal";
 import { UserForm } from "./components/UserForm";
 import { toast } from "react-toastify";
+import { AddUser } from "./components/AddUser";
 
 const App = () => {
   const [users, setUsers] = useState([]); //Estado para almacenar los usuarios del api
@@ -17,7 +17,6 @@ const App = () => {
   const [currentUser, setCurrentUser] = useState(null); // Nuevo estado para el formulario
   const [userToDelete, setUserToDelete] = useState(null); // Estado para el usuario a eliminar
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar el modal
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 1024); // Detectar si es móvil
   const [isMobileFormOpen, setIsMobileFormOpen] = useState(false);
 
   //Función para realizar la paginación
@@ -35,9 +34,15 @@ const App = () => {
 
   // Funciones completas CRUD
   const handleAddUser = () => {
-    setCurrentUser({ firstName: "", lastName: "", email: "", status: true });
+    setCurrentUser({
+      firstName: "",
+      lastName: "",
+      email: "",
+      status: true,
+    });
+    // Activar el formulario mobile si es necesario
+    setIsMobileFormOpen(true);
   };
-
   // Función para eliminar un usuario
   const handleDeleteClick = (userId) => {
     setUserToDelete(userId);
@@ -71,9 +76,8 @@ const App = () => {
   const handleEditUser = (userId) => {
     const userToEdit = users.find((user) => user.id === userId);
     setCurrentUser(userToEdit);
-    if (isMobile) {
-      setIsMobileFormOpen(true);
-    }
+    // Siempre activar el estado del modal mobile
+    setIsMobileFormOpen(true);
   };
 
   const handleSaveUser = (userData) => {
@@ -93,7 +97,8 @@ const App = () => {
       setTotal(total + 1);
     }
     setCurrentUser(null);
-    setIsMobileFormOpen(false);
+
+    setIsMobileFormOpen(false); // Asegurarse de cerrar el modal mobile
   };
 
   const handleCancelEdit = () => {
@@ -121,13 +126,19 @@ const App = () => {
       .finally(() => {
         setLoading(false); // Desactivar loading cuando termine
       });
-  }, [limit]);
+  }, []);
 
   return (
     <article className="w-full flex flex-col justify-center items-center px-1 py-2">
       <h1 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-indigo-800">
         Control de usuarios
       </h1>
+
+      {/* Componente de un boton para agregar usuario solo en mobile */}
+      <AddUser
+        handleAddUser={handleAddUser}
+        setIsMobileFormOpen={setIsMobileFormOpen}
+      />
 
       <div className="w-full flex flex-col lg:flex-row gap-20 justify-center items-start">
         {/* Parte izquierda donde se verán los usuarios */}
@@ -161,28 +172,27 @@ const App = () => {
             </>
           )}
         </div>
-        {/* Panel derecho - Solo visible en desktop */}
-        {!isMobile && (
-          <div className="hidden lg:block w-full lg:w-1/2 h-full bg-neutral-800 p-4 rounded-lg shadow my-auto">
-            {currentUser ? (
-              <UserForm
-                user={currentUser}
-                onSave={handleSaveUser}
-                onCancel={handleCancelEdit}
-              />
-            ) : (
-              <div className="flex flex-col items-center justify-center h-full text-center p-8 text-gray-500">
-                <p className="mb-4">Selecciona un usuario para editar o</p>
-                <button
-                  onClick={handleAddUser}
-                  className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
-                >
-                  Agregar nuevo usuario
-                </button>
-              </div>
-            )}
-          </div>
-        )}
+
+        {/* Panel derecho - visible solo en desktop */}
+        <div className="hidden lg:block w-full lg:w-1/2 h-full bg-neutral-800 p-4 rounded-lg shadow my-auto">
+          {currentUser ? (
+            <UserForm
+              user={currentUser}
+              onSave={handleSaveUser}
+              onCancel={handleCancelEdit}
+            />
+          ) : (
+            <div className="flex flex-col items-center justify-center h-full text-center p-8 text-gray-400">
+              <p className="mb-4">Selecciona un usuario para editar o</p>
+              <button
+                onClick={handleAddUser}
+                className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
+              >
+                Agregar nuevo usuario
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Modal de confirmación de eliminación */}
@@ -195,15 +205,17 @@ const App = () => {
         confirmText={"Eliminar"}
       />
 
-      {/* Modal de formulario para móviles */}
-      {isMobile && isMobileFormOpen && (
-        <UserForm
-          user={currentUser}
-          onSave={handleSaveUser}
-          onCancel={handleCancelEdit}
-          isMobile={true}
-        />
-      )}
+      {/* Modal de formulario - visible solo en mobile */}
+      <div className="lg:hidden">
+        {isMobileFormOpen && currentUser && (
+          <UserForm
+            user={currentUser}
+            onSave={handleSaveUser}
+            onCancel={handleCancelEdit}
+            isMobile={true}
+          />
+        )}
+      </div>
     </article>
   );
 };

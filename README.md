@@ -30,11 +30,17 @@ Tailwind CSS
 
 Lucide Icons
 
+Toastify
+
 GitHub
 
 Estructura del proyecto
 src/
 ├── components/
+|   |── AddUser.jsx        # Botón flotante para agregar usuarios solo para mobile
+|   |── ConfirmationModal.jsx     # Modal para confirmar la eliminación de un usuario
+|   |── Loading.jsx        # Componente de carga
+|   |── UserForm.jsx       # Componente para agregar un usuario
 │   ├── UserTable.jsx      # Componente de tabla de usuarios
 │   ├── PaginationTable.jsx       # Paginador
 │   └── PaginationControlers.jsx  # Controles de paginación para el limite de usuarios
@@ -62,13 +68,21 @@ npm run build
 Requisitos cumplidos
 Requisito	Estado
 Conexión a API	✅
+
 Mostrar tabla	✅
+
 Filtrar por status=true	✅
-<!-- CRUD completo	✅ -->
-<!-- Eliminar con confirmación	✅ -->
+
+CRUD completo	✅
+
+Eliminar con confirmación	✅
+
 Estilos con Tailwind	✅
+
 Subido a GitHub	✅
+
 Desplegado en Netlify	✅
+
 
 Funcionalidades adicionales
 

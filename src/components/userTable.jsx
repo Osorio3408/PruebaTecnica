@@ -54,7 +54,11 @@ export const UserTable = ({ users, handleEdit, handleDelete }) => {
                 </td>
                 <td className="py-2 px-2  text-sm">{user.email}</td>
                 <td className="py-2 px-2  flex justify-center space-x-2">
-                  <button onClick={() => handleEdit(user.id)}>
+                  <button
+                    onClick={() => handleDelete(user.id)}
+                    className="text-red-600 hover:text-red-900"
+                    title="Eliminar"
+                  >
                     <Pencil
                       className="text-indigo-800 cursor-pointer"
                       size={16}

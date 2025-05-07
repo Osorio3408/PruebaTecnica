@@ -1,15 +1,7 @@
 // components/paginationControlers.jsx
 import React from "react";
 
-export const PaginationControlers = ({
-  limit,
-  total,
-  page,
-  onLimitChange,
-  onPageChange,
-}) => {
-  const totalPages = Math.ceil(total / limit);
-
+export const PaginationControlers = ({ limit, total, page, onLimitChange }) => {
   return (
     <div className="flex flex-col sm:flex-row justify-between items-center w-full mt-2 px-2 gap-3">
       <div className="flex items-center">
@@ -29,8 +21,6 @@ export const PaginationControlers = ({
           ))}
         </select>
       </div>
-
-
 
       <div>
         <span className="text-sm">

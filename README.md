@@ -1,12 +1,77 @@
-# React + Vite
+Gestión de Usuarios - Prueba Técnica React
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Aplicación React para prueba técnica que implementa un CRUD completo de usuarios con conexión a API REST, paginación y diseño responsive.
 
-## Expanding the ESLint configuration
+Características principales:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+✅ Listado de usuarios con paginación
+
+✅ Filtrado automático por status=true
+
+<!-- ✅ Funcionalidad CRUD completa (Crear, Leer, Actualizar, Eliminar) -->
+
+<!-- ✅ Validación de formularios -->
+
+✅ Diseño responsive (mobile, tablet, desktop)
+
+<!-- ✅ Confirmación antes de eliminar registros -->
+
+✅ Despliegue en Netlify
+
+Tecnologías utilizadas
+
+React
+
+Vite
+
+Tailwind CSS
+
+Lucide Icons
+
+GitHub
+
+Estructura del proyecto
+src/
+├── components/
+│   ├── UserTable.jsx      # Componente de tabla de usuarios
+│   ├── PaginationTable.jsx       # Paginador
+│   └── PaginationControlers.jsx  # Controles de paginación para el limite de usuarios
+├── App.jsx                # Componente principal
+└── main.jsx               # Punto de entrada
+
+Instalación y uso
+Clonar el repositorio:
+
+bash
+git clone https://github.com/Osorio3408/PruebaTecnica
+Instalar dependencias:
+
+bash
+cd prueba_tecnica
+npm install
+Ejecutar en desarrollo:
+
+bash
+npm run dev
+Construir para producción:
+
+bash
+npm run build
+Requisitos cumplidos
+Requisito	Estado
+Conexión a API	✅
+Mostrar tabla	✅
+Filtrar por status=true	✅
+<!-- CRUD completo	✅ -->
+<!-- Eliminar con confirmación	✅ -->
+Estilos con Tailwind	✅
+Subido a GitHub	✅
+Desplegado en Netlify	✅
+
+Funcionalidades adicionales
+
+Paginación inteligente con límite configurable
+
+Diseño responsive adaptativo

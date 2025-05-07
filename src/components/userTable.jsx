@@ -19,7 +19,7 @@ export const UserTable = ({ users, handleEdit, handleDelete }) => {
                 <div className="flex flex-col gap-y-2 space-x-2">
                   <button
                     onClick={() => handleEdit(user.id)}
-                    className="text-indigo-800 p-1 cursor-pointer"
+                    className="text-blue-800 p-1 cursor-pointer"
                   >
                     <Pencil size={18} />
                   </button>
@@ -56,7 +56,7 @@ export const UserTable = ({ users, handleEdit, handleDelete }) => {
                 <td className="py-2 px-2  flex justify-center space-x-2">
                   <button onClick={() => handleEdit(user.id)}>
                     <Pencil
-                      className="text-indigo-800 cursor-pointer"
+                      className="text-blue-800 cursor-pointer"
                       size={16}
                     />
                   </button>
@@ -71,10 +71,10 @@ export const UserTable = ({ users, handleEdit, handleDelete }) => {
       </div>
 
       {/* Versión desktop */}
-      <div className="hidden xl:block overflow-x-auto h-[550px] overflow-y-scroll">
-        <table className="min-w-full border mx-auto rounded-lg mt-3">
+      <div className="hidden xl:block overflow-x-auto h-[500px] overflow-y-scroll">
+        <table className="min-w-full border mx-auto rounded-lg ">
           <thead>
-            <tr>
+            <tr className="bg-neutral-950 text-white">
               <th className="py-2 px-4 border">Nombre</th>
               <th className="py-2 px-4 border">Apellido</th>
               <th className="py-2 px-4 border">Correo</th>
@@ -95,7 +95,7 @@ export const UserTable = ({ users, handleEdit, handleDelete }) => {
                 </td>
                 <td className="py-2 px-4 border">
                   <button onClick={() => handleEdit(user.id)}>
-                    <Pencil className="text-indigo-800 cursor-pointer" />
+                    <Pencil className="text-blue-800 cursor-pointer" />
                   </button>
                 </td>
               </tr>

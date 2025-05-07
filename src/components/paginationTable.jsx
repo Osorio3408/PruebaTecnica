@@ -13,14 +13,14 @@ export const PaginationTable = ({
       <button
         onClick={() => onPageChange(1)}
         disabled={page === 1}
-        className="px-3 py-1 border hover:bg-indigo-400 rounded disabled:opacity-50"
+        className="px-3 py-1 border hover:bg-blue-400 rounded disabled:opacity-50"
       >
         «
       </button>
       <button
         onClick={() => onPageChange(page - 1)}
         disabled={page === 1}
-        className="px-3 py-1 border hover:bg-indigo-400 rounded disabled:opacity-50"
+        className="px-3 py-1 border hover:bg-blue-400 rounded disabled:opacity-50"
       >
         ‹
       </button>
@@ -41,8 +41,8 @@ export const PaginationTable = ({
           <button
             key={pageNum}
             onClick={() => onPageChange(pageNum)}
-            className={`px-3 py-1 border rounded hover:bg-indigo-400 ${
-              page === pageNum ? "bg-indigo-500 text-white " : ""
+            className={`px-3 py-1 border rounded hover:bg-blue-400 ${
+              page === pageNum ? "bg-blue-500 text-white " : ""
             }`}
           >
             {pageNum}
@@ -53,14 +53,14 @@ export const PaginationTable = ({
       <button
         onClick={() => onPageChange(page + 1)}
         disabled={page === totalPages}
-        className="px-3 py-1 border rounded hover:bg-indigo-400 disabled:opacity-50"
+        className="px-3 py-1 border rounded hover:bg-blue-400 disabled:opacity-50"
       >
         ›
       </button>
       <button
         onClick={() => onPageChange(totalPages)}
         disabled={page === totalPages}
-        className="px-3 py-1 border rounded hover:bg-indigo-400 disabled:opacity-50"
+        className="px-3 py-1 border rounded hover:bg-blue-400 disabled:opacity-50"
       >
         »
       </button>

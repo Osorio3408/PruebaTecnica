@@ -58,7 +58,7 @@ export const UserForm = ({ user, onSave, onCancel, isMobile = false }) => {
               onChange={(e) =>
                 setFormData({ ...formData, firstName: e.target.value })
               }
-              className="w-full p-2 border rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-white"
+              className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white"
               required
             />
           </div>
@@ -73,7 +73,7 @@ export const UserForm = ({ user, onSave, onCancel, isMobile = false }) => {
               onChange={(e) =>
                 setFormData({ ...formData, lastName: e.target.value })
               }
-              className="w-full p-2 border rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-white"
+              className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white"
               required
             />
           </div>
@@ -88,7 +88,7 @@ export const UserForm = ({ user, onSave, onCancel, isMobile = false }) => {
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
               }
-              className="w-full p-2 border rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-white"
+              className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white"
               required
             />
           </div>
@@ -105,7 +105,7 @@ export const UserForm = ({ user, onSave, onCancel, isMobile = false }) => {
             )}
             <button
               type="submit"
-              className="px-4 py-2 bg-indigo-600 rounded-md text-sm font-medium text-white hover:bg-indigo-700 flex items-center"
+              className="px-4 py-2 bg-blue-600 rounded-md text-sm font-medium text-white hover:bg-blue-700 flex items-center"
             >
               <Save size={16} className="mr-2" />
               Guardar

@@ -8,8 +8,13 @@ import { UserForm } from "./components/UserForm";
 import { toast } from "react-toastify";
 import { AddUser } from "./components/AddUser";
 import { validateEmail } from "./utils/validations";
+import { Header } from "./components/Header";
+import { Footer } from "./components/Footer";
 
 const App = () => {
+  // URL de la API
+  const API_URL = "https://api.fake-rest.refine.dev/users";
+
   const [users, setUsers] = useState([]); //Estado para almacenar los usuarios del api
   const [loading, setLoading] = useState(true); //Estado para cambiar el estado de carga
   const [page, setPage] = useState(1); //Estado para obtener el número de usuarios por página
@@ -19,6 +24,64 @@ const App = () => {
   const [userToDelete, setUserToDelete] = useState(null); // Estado para el usuario a eliminar
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar el modal
   const [isMobileFormOpen, setIsMobileFormOpen] = useState(false);
+
+  // Función para crear usuario
+  const createUser = async (userData) => {
+    try {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...userData, status: true }),
+      });
+      const newUser = await response.json();
+      setUsers([...users, newUser]);
+      setTotal(total + 1);
+      toast.success("Usuario creado con éxito", { theme: "dark" });
+      return newUser;
+    } catch (error) {
+      console.error("Error creating user:", error);
+      toast.error("Error al crear usuario", { theme: "dark" });
+      throw error;
+    }
+  };
+
+  // Función para actualizar usuario
+  const updateUser = async (id, userData) => {
+    try {
+      const response = await fetch(`${API_URL}/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData),
+      });
+      const updatedUser = await response.json();
+      setUsers(users.map((user) => (user.id === id ? updatedUser : user)));
+      toast.success("Usuario actualizado con éxito", { theme: "dark" });
+      return updatedUser;
+    } catch (error) {
+      console.error("Error updating user:", error);
+      toast.error("Error al actualizar usuario", { theme: "dark" });
+      throw error;
+    }
+  };
+
+  // Función para eliminar usuario
+  const deleteUser = async (id) => {
+    try {
+      await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+      setUsers(users.filter((user) => user.id !== id));
+      setTotal(total - 1);
+      toast.success("Usuario eliminado con éxito", { theme: "dark" });
+
+      // Ajustar paginación si es necesario
+      if (paginatedUsers.length === 1 && page > 1) {
+        setPage(page - 1);
+      }
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      toast.error("Error al eliminar usuario", { theme: "dark" });
+      throw error;
+    }
+  };
 
   //Función para realizar la paginación
   const handleLimitChange = (newLimit) => {
@@ -51,18 +114,15 @@ const App = () => {
   };
 
   // Función para confirmar la eliminación
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (userToDelete) {
-      setUsers(users.filter((user) => user.id !== userToDelete));
-      setTotal(total - 1);
-
-      // Ajustar la página si quedó vacía
-      if (paginatedUsers.length === 1 && page > 1) {
-        setPage(page - 1);
+      try {
+        await deleteUser(userToDelete);
+        setIsModalOpen(false);
+        setUserToDelete(null);
+      } catch (error) {
+        console.error("Error deleting user:", error);
       }
-
-      setIsModalOpen(false);
-      setUserToDelete(null);
     }
   };
 
@@ -80,16 +140,18 @@ const App = () => {
     setIsMobileFormOpen(true);
   };
 
-  const handleSaveUser = (userData) => {
+  const handleSaveUser = async (userData) => {
     // Validación de campos requeridos
-    if (!userData.firstName || !userData.lastName || !userData.email) {
-      toast.error("Por favor, completa todos los campos.", {
-        theme: "dark",
-      });
+    if (
+      !userData.firstName?.trim() ||
+      !userData.lastName?.trim() ||
+      !userData.email?.trim()
+    ) {
+      toast.error("Por favor, completa todos los campos.", { theme: "dark" });
       return;
     }
 
-    // Validación específica para email
+    // Validación de email
     if (!validateEmail(userData.email)) {
       toast.error("Por favor, ingresa un correo electrónico válido.", {
         theme: "dark",
@@ -97,24 +159,20 @@ const App = () => {
       return;
     }
 
-    // Resto de la lógica de guardado
-    if (userData.id) {
-      // Edición
-      setUsers(users.map((u) => (u.id === userData.id ? userData : u)));
-      toast.success("Usuario editado con éxito.", {
-        theme: "dark",
-      });
-    } else {
-      // Creación
-      setUsers([...users, { ...userData, id: Date.now() }]);
-      setTotal(total + 1);
-      toast.success("Usuario creado con éxito.", {
-        theme: "dark",
-      });
-    }
+    try {
+      if (userData.id) {
+        // Edición
+        await updateUser(userData.id, userData);
+      } else {
+        // Creación
+        await createUser(userData);
+      }
 
-    setCurrentUser(null);
-    setIsMobileFormOpen(false);
+      setCurrentUser(null);
+      setIsMobileFormOpen(false);
+    } catch (error) {
+      console.error("Error saving user:", error);
+    }
   };
 
   const handleCancelEdit = () => {
@@ -123,40 +181,36 @@ const App = () => {
   };
 
   useEffect(() => {
-    setLoading(true); // Activar loading al iniciar el fetch
-
-    fetch("https://api.fake-rest.refine.dev/users", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
+    const loadUsers = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
         setUsers(data.filter((user) => user.status));
         setTotal(data.filter((user) => user.status).length);
-      })
-      .catch((error) => {
-        console.error("Error fetching users:", error);
-      })
-      .finally(() => {
-        setLoading(false); // Desactivar loading cuando termine
-      });
+      } catch (error) {
+        console.error("Error loading users:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUsers();
   }, []);
 
   return (
-    <article className="w-full flex flex-col justify-center items-center px-1 py-2">
-      <h1 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-indigo-800">
+    <article className="w-full flex flex-col justify-center items-center h-full">
+      {/* <h1 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-blue-800">
         Control de usuarios
-      </h1>
-
+      </h1> */}
+      <Header />
       {/* Componente de un boton para agregar usuario solo en mobile */}
       <AddUser
         handleAddUser={handleAddUser}
         setIsMobileFormOpen={setIsMobileFormOpen}
       />
 
-      <div className="w-full flex flex-col lg:flex-row gap-20 justify-center items-start">
+      <div className="w-full flex flex-col lg:flex-row gap-20 justify-center items-start px-1 py-2 my-10">
         {/* Parte izquierda donde se verán los usuarios */}
         <div className="max-w-full w-full lg:w-1/2 h-full space-y-2">
           {/* Mostrar Loading o la tabla según el estado */}
@@ -202,7 +256,7 @@ const App = () => {
               <p className="mb-4">Selecciona un usuario para editar o</p>
               <button
                 onClick={handleAddUser}
-                className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
+                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
               >
                 Agregar nuevo usuario
               </button>
@@ -232,6 +286,7 @@ const App = () => {
           />
         )}
       </div>
+      <Footer />
     </article>
   );
 };
